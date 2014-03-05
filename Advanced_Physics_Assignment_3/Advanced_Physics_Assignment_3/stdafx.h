@@ -5,9 +5,10 @@
 
 #pragma comment (lib, "opengl32.lib")
 #pragma comment (lib, "glut32.lib")
+#pragma comment (lib, "cyclone.lib")
 
+#include <cyclone\cyclone.h>
 #include <stdlib.h>
-
 #include <Windows.h>
 #include <stdio.h>
 #include <tchar.h>
