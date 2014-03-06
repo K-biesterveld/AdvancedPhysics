@@ -12,27 +12,44 @@
 
 #include "stdafx.h"
 
-struct AmmoRound
+class AmmoRound : public cyclone::CollisionSphere
 {
-	cyclone::Particle particle;
+public:
+	AmmoRound(){
+	body = new cyclone::RigidBody();
+	}
 
+	~AmmoRound(){
+		delete body;
+	}
 	/** Draws the round. */
 	void render()
 	{
 		cyclone::Vector3 position;
-		particle.getPosition(&position);
+		body->getPosition(&position);
 
 		glColor3f(0, 0, 0);
 		glPushMatrix();
 		glTranslatef(position.x, position.y, position.z);
-		glutSolidSphere(0.5f, 36, 2);
+		glutSolidSphere(0.2f, 36, 2);
 		glPopMatrix();		
 	}
 };
 
-AmmoRound* shot = new AmmoRound();
+//AmmoRound* p1 = new AmmoRound();
+//AmmoRound* p2 = new AmmoRound();
+AmmoRound* rigidBody1 = new AmmoRound();
+cyclone::Spring* spring1;
 bool shotFired;
 
+void init()
+{
+	rigidBody1->body->setMass(2.0f);
+	rigidBody1->body->addVelocity(cyclone::Vector3(30,50,0));
+	rigidBody1->body->setAcceleration(cyclone::Vector3(0,-1,0));
+	rigidBody1->body->setDamping(0.99f,1);
+	//spring1 = new cyclone::Spring(cyclone::Vector3(0,0,0), rigidBody1, cyclone::Vector3(0,0,0),10,0.1f);
+}
 
 /**
 * Called each frame to update the 3D scene. Delegates to
@@ -41,8 +58,7 @@ bool shotFired;
 void update()
 {
 	glutPostRedisplay();
-	if(shotFired)
-		shot->particle.integrate(0.001);
+	rigidBody1->body->integrate(0.001);
 }
 
 
@@ -67,12 +83,12 @@ void display(void){
 	/////// DO WHATEVER YOU WANT /////////
 	glColor3f(0.5, 0.0, 0.5); // <---- setting the draw color;	
 	//renderQuadPrimitive();  //Rendering a quad in the color set above.
-	if(shotFired)
-		shot->render();
+	rigidBody1->render();
+
 	///// Last call /////
 	glutSwapBuffers();
 }
-
+.
 /**
 * Called when a mouse button is pressed. Delegates to the
 * application.
@@ -82,16 +98,8 @@ void mouse(int button, int state, int x, int y)
 	if (state == GLUT_DOWN){
 		if(!shotFired){
 			shotFired = true;
-			shot->particle.setMass(2.0f); // 2.0kg
-			shot->particle.setVelocity(50.0f, 0.0f, 0.0f); // 35m/s
-			shot->particle.setAcceleration(0.0f, -1.0f, 0.0f);
-			shot->particle.setDamping(0.99f);
 
-			// Set the data common to all particle types
-			shot->particle.setPosition(0.0f, 1.5f, 0.0f);
-
-			// Clear the force accumulators
-			//shot->particle.clearAccumulator();
+			
 		}
 
 	}
@@ -147,7 +155,7 @@ int main(int argc, char** argv)
 	glutCreateWindow("Dimension");
 	glScalef(0.1f,0.1f,0.1f);
 	glClearColor(0.5, 0.5, 0.5, 1); //<---- Color of background
-
+	init();
 	// Set up the appropriate handler functions
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);

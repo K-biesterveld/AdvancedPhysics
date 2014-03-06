@@ -3,17 +3,12 @@
 // are changed infrequently
 //
 
-#pragma comment (lib, "opengl32.lib")
-#pragma comment (lib, "glut32.lib")
-#pragma comment (lib, "cyclone_d.lib")
+#pragma once
 
-#include <cyclone\cyclone.h>
-#include <stdlib.h>
-#include <Windows.h>
+#include "targetver.h"
+
 #include <stdio.h>
 #include <tchar.h>
-#include "targetver.h"
-#include "gl\glut.h"
 
 
 
