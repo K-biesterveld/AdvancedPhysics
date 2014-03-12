@@ -58,7 +58,7 @@ void init()
 void update()
 {
 	glutPostRedisplay();
-	rigidBody1->body->integrate(0.001);
+	rigidBody1->body->integrate(0.01);
 }
 
 
@@ -88,7 +88,7 @@ void display(void){
 	///// Last call /////
 	glutSwapBuffers();
 }
-.
+
 /**
 * Called when a mouse button is pressed. Delegates to the
 * application.
@@ -156,6 +156,7 @@ int main(int argc, char** argv)
 	glScalef(0.1f,0.1f,0.1f);
 	glClearColor(0.5, 0.5, 0.5, 1); //<---- Color of background
 	init();
+
 	// Set up the appropriate handler functions
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
